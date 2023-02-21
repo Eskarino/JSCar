@@ -11,21 +11,76 @@ class Car{
         this.acceleration = 0.05;
         this.friction = 0.02
         this.steering_capacity = 0.03;
-        this.max_speed = 3
+        this.max_speed = 4
+
+        this.drift_momentum = 0;
+        this.drift_friction = 0.95;
+        this.drift_speed = 3;
 
         this.controls = new Controls();
     }
 
     update(){
-        this.move();
+        this.#move();
     }
 
-    move(){
+    #move(){
+        var drift_direction = this.angle - Math.PI/2
+        var x_drift = -this.drift_momentum * Math.sin(drift_direction);
+        var y_drift = -this.drift_momentum * Math.cos(drift_direction);
+
+        this.#get_controls();
+        this.x -= this.speed * Math.sin(this.angle) + x_drift;
+        this.y -= this.speed * Math.cos(this.angle) + y_drift;
+
+        this.drift_momentum *= this.drift_friction
+        if(Math.abs(this.drift_momentum) < 0.01){
+            this.drift_momentum=0;
+        }
+
+        if(this.speed>0){
+            this.speed -= this.friction;
+        }
+        if(this.speed<0){
+            this.speed += this.friction;
+        }
+        if(Math.abs(this.speed)<this.friction){
+            this.speed = 0
+        }
+    }
+
+    #get_controls(){
+        var multiplier = 1
+        if(Math.abs(this.speed) < this.drift_speed){
+            multiplier = Math.abs(this.speed) / this.drift_speed;
+        }
+        if(this < 0){
+            multiplier *= -1
+        }
+
+        var driftAmount = this.speed * this.steering_capacity * 1.5
+        if(this.speed < 2){
+            driftAmount = 0
+        }
+            
         if(this.controls.left){
-            this.angle += this.steering_capacity;
+            if(this.speed<0){
+                this.angle -= this.steering_capacity * multiplier;
+            }
+            else {
+                this.angle += this.steering_capacity * multiplier;
+                this.drift_momentum -= driftAmount
+            }
+            
         }
         if(this.controls.right){
-            this.angle -= this.steering_capacity;
+            if(this.speed<0){
+                this.angle += this.steering_capacity * multiplier;
+            } 
+            else {
+                this.angle -= this.steering_capacity * multiplier;
+                this.drift_momentum += driftAmount
+            }
         }
         if(this.controls.forward){
             this.speed += this.acceleration;
@@ -38,19 +93,6 @@ class Car{
             if(this.speed < -this.max_speed/2){
                 this.speed = -this.max_speed/2;
             }
-        }
-
-        this.x -= this.speed * Math.sin(this.angle);
-        this.y -= this.speed * Math.cos(this.angle);
-
-        if(this.speed>0){
-            this.speed -= this.friction;
-        }
-        if(this.speed<0){
-            this.speed += this.friction;
-        }
-        if(Math.abs(this.speed)<this.friction){
-            this.speed = 0
         }
     }
 
