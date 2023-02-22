@@ -8,16 +8,17 @@ class Road{
         this.starting_x = 100;
         this.starting_y = height/2;
         this.points = [[this.starting_x, this.starting_y]];
+        this.segments = []
 
         this.road_width = 50;
         this.#create_road();
     }
 
     #create_road() {
-        this.#define_points();
+        this.#define_segments();
     }
 
-    #define_points() {
+    #define_segments() {
         let squares_in_height = 2;
         let squares_in_width = ~~this.nb_points/squares_in_height;
         let square_width_size = this.width/squares_in_width - this.road_width;
@@ -40,7 +41,9 @@ class Road{
             let point_x = x_min + Math.random()*square_width_size;
             let point_y = y_min + Math.random()*square_height_size;
             this.points.push([point_x, point_y]);
+            this.segments.push([this.points[i],this.points[i+1]]);
         }
+        this.segments.push([this.points[this.points.length-1],this.points[0]]);
     }
 
     draw() {
