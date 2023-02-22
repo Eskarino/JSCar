@@ -1,9 +1,10 @@
 class Car{
-    constructor(x, y, width, height){
+    constructor(ctx, x, y){
+        this.ctx = ctx;
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = 10;
+        this.height = 25;
 
         this.speed = 0;
         this.angle = 0;
@@ -25,9 +26,9 @@ class Car{
     }
 
     #move(){
-        var drift_direction = this.angle - Math.PI/2
-        var x_drift = -this.drift_momentum * Math.sin(drift_direction);
-        var y_drift = -this.drift_momentum * Math.cos(drift_direction);
+        let drift_direction = this.angle - Math.PI/2
+        let x_drift = -this.drift_momentum * Math.sin(drift_direction);
+        let y_drift = -this.drift_momentum * Math.cos(drift_direction);
 
         this.#get_controls();
         this.x -= this.speed * Math.sin(this.angle) + x_drift;
@@ -45,22 +46,22 @@ class Car{
             this.speed += this.friction;
         }
         if(Math.abs(this.speed)<this.friction){
-            this.speed = 0
+            this.speed = 0;
         }
     }
 
     #get_controls(){
-        var multiplier = 1
+        let multiplier = 1;
         if(Math.abs(this.speed) < this.drift_speed){
             multiplier = Math.abs(this.speed) / this.drift_speed;
         }
         if(this < 0){
-            multiplier *= -1
+            multiplier *= -1;
         }
 
-        var driftAmount = this.speed * this.steering_capacity * 1.5
+        let driftAmount = this.speed * this.steering_capacity * 1.5;
         if(this.speed < 2){
-            driftAmount = 0
+            driftAmount = 0;
         }
             
         if(this.controls.left){
@@ -96,7 +97,8 @@ class Car{
         }
     }
 
-    draw(ctx){
+    draw(){
+        let ctx = this.ctx;
         ctx.save();
         ctx.translate(this.x,this.y);
         ctx.rotate(-this.angle);
