@@ -15,7 +15,7 @@ class Car{
         this.max_speed = 4
 
         this.drift_momentum = 0;
-        this.drift_friction = 0.95;
+        this.drift_friction = 0.90;
         this.drift_speed = 3;
 
         this.controls = new Controls();
