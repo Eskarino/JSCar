@@ -4,7 +4,7 @@ class Sensors{
         this.car = car;
         this.road = road;
         this.nb_rays = 7;
-        this.ray_lenght = 100;
+        this.ray_lenght = 200;
         this.angle = Math.PI;
         
         this.rays = [];
@@ -14,12 +14,14 @@ class Sensors{
 
     update(){
         this.#build_rays();
+        this.readings = [];
         this.visible_rays = this.rays;
         for(let i = 0; i<this.rays.length; i++){
             let touche = this.#get_reading(this.rays[i], this.road.borders);
             if(touche){
                 this.visible_rays[i] = [this.rays[i][0], [touche.x, touche.y]];
             }
+            this.readings.push(touche)
         }
     }
 

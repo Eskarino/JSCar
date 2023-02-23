@@ -85,7 +85,6 @@ class Road{
 
         this.ext_border = new_ext_segments;
         this.int_border = new_int_segments;
-
         this.borders = this.ext_border.concat(this.int_border);
     }
 

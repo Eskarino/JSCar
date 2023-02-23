@@ -55,7 +55,6 @@ function move_segment(segment, direction, distance, size_modification = 1){
     let x2 = segment[1][0];
     let y2 = segment[1][1];
     let angle = Math.atan((y2-y1)/(x2-x1));
-    let size = Math.sqrt((x1-x2)^2-(y1-y2)^2);
     if((x2-x1)<0){
         angle += Math.PI;
     }

@@ -1,8 +1,12 @@
 class Car{
-    constructor(ctx, x, y){
+    constructor(ctx, road, id, agent){
         this.ctx = ctx;
-        this.x = x;
-        this.y = y;
+        this.road = road;
+        this.agent = agent;
+        this.id = id;
+
+        this.x = road.starting_x;
+        this.y = road.starting_y;
         this.width = 10;
         this.height = 25;
 
@@ -18,11 +22,39 @@ class Car{
         this.drift_friction = 0.90;
         this.drift_speed = 3;
 
-        this.controls = new Controls();
+        this.damaged = false;
+
+        if(agent == 'Virtual'){
+            this.sensors = new Sensors(this.ctx, this, this.road);
+            this.net = new GNet(
+                [this.sensors.nb_rays + 1, 6, 4] //Sensors+Speed, LayerSize, OutputSize
+            )
+        }
+        this.controls = new Controls(agent);
+        
+        this.polygon = this.#createPolygons();
     }
 
     update(){
-        this.#move();
+        if(!this.damaged){
+            this.#move();
+            this.polygon = this.#createPolygons();
+            this.damaged = this.#assessDamage();
+
+            if(this.agent=='Virtual'){
+                this.sensors.update()
+                const offsets = this.sensors.readings.map(
+                    s=>s==null?0:1-s.offset);
+                const gnet_in = [this.speed].concat(offsets)
+                const outputs=GNet.forward(gnet_in, this.net);
+
+                this.controls.forward = outputs[0];
+                this.controls.left = outputs[1];
+                this.controls.right = outputs[2];
+                this.controls.backward = outputs[3];
+            }
+            
+        }
     }
 
     #move(){
@@ -97,19 +129,71 @@ class Car{
         }
     }
 
+    #createPolygons(){
+        const points = [];
+        const rad = Math.hypot(this.width, this.height)/2;
+        const alpha = Math.atan2(this.width, this.height);
+        points.push({
+            x:this.x-Math.sin(this.angle-alpha)*rad,
+            y:this.y-Math.cos(this.angle-alpha)*rad
+        });
+        points.push({
+            x:this.x-Math.sin(this.angle+alpha)*rad,
+            y:this.y-Math.cos(this.angle+alpha)*rad
+        });
+        points.push({
+            x:this.x-Math.sin(this.angle-alpha+Math.PI)*rad,
+            y:this.y-Math.cos(this.angle-alpha+Math.PI)*rad
+        });
+        points.push({
+            x:this.x-Math.sin(this.angle+alpha+Math.PI)*rad,
+            y:this.y-Math.cos(this.angle+alpha+Math.PI)*rad
+        });
+        return points
+    }
+
+    #assessDamage(){
+        let car_segments = []
+        for(let i = 0; i < this.polygon.length; i++){
+            car_segments.push(
+                [[this.polygon[i].x, 
+                this.polygon[i].y], 
+                [this.polygon[(i+1)%this.polygon.length].x, 
+                this.polygon[(i+1)%this.polygon.length].y]]) 
+        }
+
+        for(let i = 0; i < car_segments.length; i++){
+            for(let j = 0; j < this.road.borders.length; j++){
+                let damage = getIntersection(car_segments[i], this.road.borders[j]);
+                if(damage){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     draw(){
         let ctx = this.ctx;
-        ctx.save();
-        ctx.translate(this.x,this.y);
-        ctx.rotate(-this.angle);
+
+        ctx.globalAlpha = 0.2;
+        if(this.damaged){
+            ctx.fillStyle = 'gray';
+        } else {
+            ctx.fillStyle = 'black';
+        }
         ctx.beginPath();
-        ctx.rect(
-            -this.width/2,
-            -this.height/2,
-            this.width,
-            this.height
-        );
+        ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
+        for(let i = 1; i < this.polygon.length; i++){
+            ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
+        }
         ctx.fill();
-        ctx.restore();
+
+        if(this.sensors){
+            this.sensors.draw()
+        }
+        ctx.globalAlpha = 1;
+
+
     }
 }

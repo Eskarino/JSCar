@@ -1,11 +1,15 @@
 class Controls{
-    constructor(){
+    constructor(agent_type){
         this.forward = false;
         this.backward = false;
         this.left = false;
         this.right = false;
 
-        this.#detectkey();
+        if(agent_type=='Virtual'){
+            null;
+        }else{
+            this.#detectkey();
+        }
     }
 
     #detectkey(){
