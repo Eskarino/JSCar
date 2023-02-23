@@ -1,5 +1,5 @@
 class Road{
-    constructor(ctx, nb_points, height, width) {
+    constructor(ctx, nb_points, height, width, rgates_per_segment = 5) {
         this.ctx = ctx;
         this.height = height;
         this.width = width;
@@ -13,6 +13,8 @@ class Road{
         this.ext_border = []
         this.int_border = []
 
+        this.rgates_per_segment = rgates_per_segment;
+
         this.road_width = 50;
         this.#create_road();
     }
@@ -20,6 +22,7 @@ class Road{
     #create_road() {
         this.#define_segments();
         this.#create_borders();
+        this.#create_reward_gates();
     }
 
     #define_segments() {
@@ -88,6 +91,17 @@ class Road{
         this.borders = this.ext_border.concat(this.int_border);
     }
 
+    #create_reward_gates(){
+        this.gates = [];
+        for(let i = 0; i < this.segments.length; i++){
+            let gates = get_gates(
+                this.segments[i], this.rgates_per_segment, this.road_width);
+            for(let j=0; j < gates.length; j++){
+                this.gates.push(gates[j])
+            }
+        }
+    }
+
     draw() {
         for (let i = 0; i < this.points.length; i++) {
             let point1 = this.points[i];
@@ -96,6 +110,9 @@ class Road{
         }
         for (let i = 0; i < this.borders.length; i++){
             draw_segment(this.ctx, this.borders[i], 5, "red");
+        }
+        for (let i = 0; i < this.gates.length; i++){
+            draw_segment(this.ctx, this.gates[i], 5, "yellow");
         }
     }
 }

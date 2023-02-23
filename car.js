@@ -149,22 +149,26 @@ class Car{
             x:this.x-Math.sin(this.angle+alpha+Math.PI)*rad,
             y:this.y-Math.cos(this.angle+alpha+Math.PI)*rad
         });
+        this.#updateSegments(points)
         return points
     }
 
-    #assessDamage(){
+    #updateSegments(points){
         let car_segments = []
-        for(let i = 0; i < this.polygon.length; i++){
+        for(let i = 0; i < points.length; i++){
             car_segments.push(
-                [[this.polygon[i].x, 
-                this.polygon[i].y], 
-                [this.polygon[(i+1)%this.polygon.length].x, 
-                this.polygon[(i+1)%this.polygon.length].y]]) 
+                [[points[i].x, 
+                points[i].y], 
+                [points[(i+1)%points.length].x, 
+                points[(i+1)%points.length].y]]) 
         }
+        this.car_segments = car_segments;
+    }
 
-        for(let i = 0; i < car_segments.length; i++){
+    #assessDamage(){
+        for(let i = 0; i < this.car_segments.length; i++){
             for(let j = 0; j < this.road.borders.length; j++){
-                let damage = getIntersection(car_segments[i], this.road.borders[j]);
+                let damage = getIntersection(this.car_segments[i], this.road.borders[j]);
                 if(damage){
                     return true;
                 }
@@ -173,10 +177,12 @@ class Car{
         return false;
     }
 
-    draw(){
+    draw(best_car){
         let ctx = this.ctx;
 
-        ctx.globalAlpha = 0.2;
+        if(this.id!=best_car.id){
+            ctx.globalAlpha = 0.2;
+        }
         if(this.damaged){
             ctx.fillStyle = 'gray';
         } else {
@@ -189,9 +195,9 @@ class Car{
         }
         ctx.fill();
 
-        if(this.sensors){
-            this.sensors.draw()
-        }
+        // if(this.sensors){
+        //     this.sensors.draw()
+        // }
         ctx.globalAlpha = 1;
 
 

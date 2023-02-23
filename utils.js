@@ -91,3 +91,29 @@ function extend_segment(segment, size_modification){
     let new_segment = [[new_x1, new_y1], [new_x2, new_y2]];
     return new_segment;
 }
+
+function get_gates(segment, gates_per_segment, distance){
+    let x1 = segment[0][0];
+    let y1 = segment[0][1];
+    let x2 = segment[1][0];
+    let y2 = segment[1][1];
+
+    let angle = Math.atan((y2-y1)/(x2-x1));
+    if((x2-x1)<0){
+        angle += Math.PI;
+    }
+
+    let gates = [];
+    let freq = 1/gates_per_segment;
+    for (let i = 0; i < gates_per_segment; i++){
+        let xm = lerp(x1, x2, freq*i);
+        let ym = lerp(y1, y2, freq*i);
+        
+        gate_x1 = xm + distance*Math.cos(angle+Math.PI/2);
+        gate_y1 = ym + distance*Math.sin(angle+Math.PI/2);
+        gate_x2 = xm + distance*Math.cos(angle-Math.PI/2);
+        gate_y2 = ym + distance*Math.sin(angle-Math.PI/2);
+        gates.push([[gate_x1, gate_y1],[gate_x2, gate_y2]]);
+    }
+    return gates;
+}
