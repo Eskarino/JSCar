@@ -1,5 +1,5 @@
 class Road{
-    constructor(ctx, nb_points, height, width, rgates_per_segment = 5) {
+    constructor(ctx, nb_points, height, width, rgates_per_segment = 10) {
         this.ctx = ctx;
         this.height = height;
         this.width = width;

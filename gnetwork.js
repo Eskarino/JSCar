@@ -17,6 +17,27 @@ class GNet{
         }
         return outputs;
     }
+
+    static mutate(network, percentage = 0){
+        network.layers.forEach(layer => {
+            for(let i=0; i<layer.biases.length; i++){
+                layer.biases[i]=lerp(
+                    layer.biases[i],
+                    Math.random()*2-1,
+                    percentage
+                )
+            }
+            for(let i=0; i<layer.weights.length; i++){
+                for(let j=0; j<layer.weights[i]; j++){
+                    layer.weights[i][j]=lerp(
+                        layer.weights[i][j],
+                        Math.random()*2-1,
+                        percentage
+                    )
+                }
+            }   
+        });
+    }
 }
 
 class Layer{

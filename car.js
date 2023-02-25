@@ -16,11 +16,11 @@ class Car{
         this.acceleration = 0.05;
         this.friction = 0.02
         this.steering_capacity = 0.03;
-        this.max_speed = 4
+        this.max_speed = 3
 
         this.drift_momentum = 0;
         this.drift_friction = 0.90;
-        this.drift_speed = 3;
+        this.drift_speed = 2;
 
         this.damaged = false;
 
@@ -170,6 +170,7 @@ class Car{
             for(let j = 0; j < this.road.borders.length; j++){
                 let damage = getIntersection(this.car_segments[i], this.road.borders[j]);
                 if(damage){
+                    this.speed = 0;
                     return true;
                 }
             }
@@ -180,14 +181,19 @@ class Car{
     draw(best_car){
         let ctx = this.ctx;
 
-        if(this.id!=best_car.id){
-            ctx.globalAlpha = 0.2;
-        }
         if(this.damaged){
             ctx.fillStyle = 'gray';
         } else {
             ctx.fillStyle = 'black';
         }
+
+        if(this.id!=best_car.id){
+            ctx.globalAlpha = 0.2;
+        } else {
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = 'green';
+        }
+        
         ctx.beginPath();
         ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
         for(let i = 1; i < this.polygon.length; i++){
