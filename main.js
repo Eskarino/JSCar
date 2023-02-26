@@ -3,6 +3,11 @@ canvas.height = 1000;
 canvas.width = 1500;
 const ctx = canvas.getContext('2d');
 
+const DOM_selected_car = document.getElementById("selectedCar");
+const DOM_best_car_counter = document.getElementById("bestCar");
+const DOM_selected_car_counter = document.getElementById("selectedCar");
+let animation_ongoing = false;
+
 const points = 7;
 
 let road = new Road(ctx, points, canvas.height, canvas.width);
@@ -16,6 +21,7 @@ discard_gnet()
 let best_car = cars[0];
 let selected_car = null;
 
+
 let paused = false;
 check_clicked_car()
 
@@ -23,12 +29,17 @@ road.draw();
 let loop_counter = 0;
 
 function start(){
-    selected_car = null;
-    document.getElementById("selectedCar").value = '';
-    paused = false;
-    loop_counter = 0;
-    car_init();
-    loop();
+    if (animation_ongoing){
+        animation_ongoing = !animation_ongoing
+    } else {
+        selected_car = null;
+        DOM_selected_car.value = '';
+        paused = false;
+        loop_counter = 0;
+        car_init();
+        animation_ongoing = true;
+        loop();
+    }
 }
 
 function loop() {
@@ -42,26 +53,28 @@ function loop() {
         cars[i].draw(car_to_draw);
         if (!paused && !cars[i].damaged){
             cars[i].update();
-            calculate_reward(cars[i], car_table)
-            
-        }                    
+            calculate_reward(cars[i], car_table)   
+        }
+
         best_car  = cars.find(
             c=>car_table[c.id].reward==Math.max(
                 ...cars.map(c=>car_table[c.id].reward)
         ));
 
-        document.getElementById("bestCar").value = best_car.id
+        DOM_best_car_counter.value = best_car.id
         if (selected_car){
-            document.getElementById("selectedCar").value = selected_car.id
+            DOM_selected_car_counter.value = selected_car.id
         }
-        // remaining_cars = cars.filter((c) => c.damaged == false)
         loop_counter+= 1
     }
-    requestAnimationFrame(loop);
+
+    if (animation_ongoing){
+        requestAnimationFrame(loop);
+    }
 }
 
 function generateCars(nb_cars){
-    const cars = [];
+    let cars = [];
     for(let i = 0; i < nb_cars; i++){
         cars.push(new Car(ctx, road, i, 'Virtual'))
     }
