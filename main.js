@@ -46,6 +46,11 @@ function loop() {
             c=>car_table[c.id].reward==Math.max(
                 ...cars.map(c=>car_table[c.id].reward)
         ));
+
+        document.getElementById("bestCar").value = best_car.id
+        if (selected_car){
+            document.getElementById("selectedCar").value = selected_car.id
+        }
         // remaining_cars = cars.filter((c) => c.damaged == false)
         loop_counter+= 1
     }
@@ -160,6 +165,5 @@ function check_clicked_car(){
                 }    
             }
         });
-        console.log(selected_car.id)
     }, false);
 }

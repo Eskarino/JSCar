@@ -95,7 +95,7 @@ class Road{
         this.gates = [];
         for(let i = 0; i < this.segments.length; i++){
             let gates = get_gates(
-                this.segments[i], this.rgates_per_segment, this.road_width);
+                this.int_border[i], this.ext_border[i], this.segments[i], this.rgates_per_segment, this.road_width);
             for(let j=0; j < gates.length; j++){
                 this.gates.push(gates[j])
             }

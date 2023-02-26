@@ -92,7 +92,7 @@ function extend_segment(segment, size_modification){
     return new_segment;
 }
 
-function get_gates(segment, gates_per_segment, distance){
+function get_gates(border_int, border_ext, segment, gates_per_segment, distance){
     let x1 = segment[0][0];
     let y1 = segment[0][1];
     let x2 = segment[1][0];
@@ -104,16 +104,34 @@ function get_gates(segment, gates_per_segment, distance){
     }
 
     let gates = [];
+    gates.push([[border_int[0][0], border_int[0][1]],[border_ext[0][0], border_ext[0][1]]]);
+
     let freq = 1/gates_per_segment;
     for (let i = 0; i < gates_per_segment; i++){
         let xm = lerp(x1, x2, freq*i);
         let ym = lerp(y1, y2, freq*i);
         
-        gate_x1 = xm + distance*Math.cos(angle+Math.PI/2);
-        gate_y1 = ym + distance*Math.sin(angle+Math.PI/2);
-        gate_x2 = xm + distance*Math.cos(angle-Math.PI/2);
-        gate_y2 = ym + distance*Math.sin(angle-Math.PI/2);
-        gates.push([[gate_x1, gate_y1],[gate_x2, gate_y2]]);
+        gate_x_int = xm + distance*Math.cos(angle+Math.PI/2);
+        gate_y_int = ym + distance*Math.sin(angle+Math.PI/2);
+        gate_x_ext = xm + distance*Math.cos(angle-Math.PI/2);
+        gate_y_ext = ym + distance*Math.sin(angle-Math.PI/2);
+
+        min_x_int = Math.min(border_int[0][0], border_int[1][0])
+        max_x_int = Math.max(border_int[0][0], border_int[1][0])
+        min_y_int = Math.min(border_int[0][1], border_int[1][1])
+        max_y_int = Math.max(border_int[0][1], border_int[1][1])
+
+        min_x_ext = Math.min(border_ext[0][0], border_ext[1][0])
+        max_x_ext = Math.max(border_ext[0][0], border_ext[1][0])
+        min_y_ext = Math.min(border_ext[0][1], border_ext[1][1])
+        max_y_ext = Math.max(border_ext[0][1], border_ext[1][1])
+
+        
+        if(gate_x_int > min_x_int && gate_x_int < max_x_int && gate_y_int > min_y_int && gate_y_int < max_y_int){
+            if(gate_x_ext > min_x_ext && gate_x_ext < max_x_ext && gate_y_ext > min_y_ext && gate_y_ext < max_y_ext){
+                gates.push([[gate_x_int, gate_y_int],[gate_x_ext, gate_y_ext]]);
+            }
+        }
     }
     return gates;
 }
