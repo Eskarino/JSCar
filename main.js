@@ -11,6 +11,8 @@ const nb_cars = 50;
 let cars = generateCars(nb_cars);
 let car_table = create_car_table(nb_cars);
 
+discard_gnet()
+
 let best_car = cars[0];
 let selected_car = null;
 
@@ -22,6 +24,7 @@ let loop_counter = 0;
 
 function start(){
     selected_car = null;
+    document.getElementById("selectedCar").value = '';
     paused = false;
     loop_counter = 0;
     car_init();
