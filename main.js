@@ -7,16 +7,22 @@ const points = 7;
 
 let road = new Road(ctx, points, canvas.height, canvas.width);
 
-const nb_cars = 100;
+const nb_cars = 50;
 let cars = generateCars(nb_cars);
-let car_table = create_car_table(nb_cars)
+let car_table = create_car_table(nb_cars);
+
 let best_car = cars[0];
+let selected_car = null;
+
+let paused = false;
+check_clicked_car()
 
 road.draw();
 let loop_counter = 0;
-start()
 
 function start(){
+    selected_car = null;
+    paused = false;
     loop_counter = 0;
     car_init();
     loop();
@@ -28,21 +34,22 @@ function loop() {
     road.draw();
 
     for(let i = 0; i < cars.length; i++){
-        cars[i].draw(best_car);
-        cars[i].update();
-        calculate_reward(cars[i], car_table)
-    }
-
-    best_car  = cars.find(
-        c=>car_table[c.id].reward==Math.max(
-            ...cars.map(c=>car_table[c.id].reward)
+        let car_to_draw = best_car;
+        if(selected_car) {car_to_draw=selected_car;}
+        cars[i].draw(car_to_draw);
+        if (!paused && !cars[i].damaged){
+            cars[i].update();
+            calculate_reward(cars[i], car_table)
+            
+        }                    
+        best_car  = cars.find(
+            c=>car_table[c.id].reward==Math.max(
+                ...cars.map(c=>car_table[c.id].reward)
         ));
-    
-    
-    if (car_table[best_car.id].reward > -1 + loop_counter / 1000){
-        requestAnimationFrame(loop);
+        // remaining_cars = cars.filter((c) => c.damaged == false)
         loop_counter+= 1
     }
+    requestAnimationFrame(loop);
 }
 
 function generateCars(nb_cars){
@@ -80,21 +87,79 @@ function car_init(){
     cars = generateCars(nb_cars);
     car_table = create_car_table(nb_cars)
     best_car = cars[0];
+    let mutation_rate = document.getElementById("mutationRate").value/100;
     if (localStorage.getItem('best_car')){
         for (let i=0; i<cars.length; i++){
             cars[i].net = JSON.parse(localStorage.getItem('best_car'));
             if(i!=0){
-                GNet.mutate(cars[i].net, 0.15) //(i*3)
+                GNet.mutate(cars[i].net, mutation_rate) //(i*3)
             }
         }
     }
 }
 
 function save_gnet(){
-    localStorage.setItem('best_car', 
-        JSON.stringify(best_car.net));
+    if(selected_car){
+        localStorage.setItem('best_car', 
+            JSON.stringify(selected_car.net));
+        } else {
+            localStorage.setItem('best_car', 
+                JSON.stringify(best_car.net));
+    }
 }
 
 function discard_gnet(){
     localStorage.removeItem('best_car');
+}
+
+function reset_map(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    road = new Road(ctx, points, canvas.height, canvas.width);
+    road.draw();
+    cars = []
+}
+
+function pause_resume(){
+    paused = !paused;
+    loop()
+}
+
+function changeMutationRate(val){
+    let curr_val = document.getElementById("mutationRate").value;
+    let new_val = Number(curr_val) + val;
+    if (new_val > 100){
+        new_val = 100;
+    }
+    if (new_val<0){
+        new_val = 0;
+    }
+
+    document.getElementById("mutationRate").value = new_val;
+}
+
+function check_clicked_car(){
+    let canvasLeft = canvas.offsetLeft + canvas.clientLeft;
+    let canvasTop = canvas.offsetTop + canvas.clientTop;
+    let canvasClientHeight = canvas.clientHeight;
+    let canvasClientWidth = canvas.clientWidth;
+
+    canvas.addEventListener('click', function(event) {
+        let x = (event.pageX -canvasLeft)*(canvas.height/canvasClientHeight);
+        let y = (event.pageY -canvasTop)*(canvas.width/canvasClientWidth);
+        let radius = 20;
+
+        closest_distance = radius;
+        cars.forEach(function(car) {
+            if (y > car.y - radius && y < car.y + radius 
+                && x > car.x - radius && x < car.x + radius) {
+                
+                let dist = Math.hypot((x - car.x), (y - car.y))
+                if (dist < closest_distance){
+                    closest_distance = dist;
+                    selected_car = car;
+                }    
+            }
+        });
+        console.log(selected_car.id)
+    }, false);
 }

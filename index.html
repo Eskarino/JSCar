@@ -9,9 +9,18 @@
         <div id="canvasCtn" width="100%">
             <canvas id="theCanvas"></canvas>
             <div id="saveButtons">
+                <button onclick="reset_map()">Reset Map</button>
                 <button onclick="start()">Start</button>
                 <button onclick="save_gnet()">Save</button>
                 <button onclick="discard_gnet()">Delete</button>
+                <button onclick="pause_resume()">Pause / Resume</button>
+            </div>
+            <div id="mutationButtons">
+                <button onclick="changeMutationRate(-10)">-10</button>
+                <button onclick="changeMutationRate(-1)">-1</button>
+                <input id="mutationRate" value = 100 autocomplete="off"/>
+                <button onclick="changeMutationRate(1)">+1</button>
+                <button onclick="changeMutationRate(10)">+10</button>
             </div>
             <script src="gnetwork.js"></script>
             <script src="utils.js"></script>
