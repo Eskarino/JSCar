@@ -10,9 +10,7 @@ const DOM_selected_car_counter = document.getElementById("selectedCar");
 const startBtn = document.getElementById('startBtn');
 let animation_ongoing = false;
 
-const points = 7;
-
-let road = new Road(ctx, points, canvas.height, canvas.width);
+let road = new Road(ctx, canvas.height, canvas.width);
 
 const nb_cars = 100;
 let cars = generateCars(nb_cars);
