@@ -14,31 +14,32 @@
     <body>
         <div id="canvasCtn" width="100%">
             <canvas id="theCanvas"></canvas>
-            <div id="saveButtons">
-                <button onclick="reset_map()" type="button" class="btn btn-primary">Reset Map</button>
-                <button id="startBtn" onclick="start()" type="button" class="btn btn-primary">Start</button>
-                <button onclick="save_gnet()" type="button" class="btn btn-primary">Save</button>
-                <button onclick="discard_gnet()" type="button" class="btn btn-primary">Delete</button>
-                <button onclick="pause_resume()" type="button" class="btn btn-primary">Pause / Resume</button>
-            </div>
-            <div id="mutationButtons">
-                <button onclick="changeMutationRate(-10)" type="button" class="btn btn-primary">-10</button>
-                <button onclick="changeMutationRate(-1)" type="button" class="btn btn-primary">-1</button>
-                <input id="mutationRate" value = 100 autocomplete="off"/>
-                <button onclick="changeMutationRate(1)" type="button" class="btn btn-primary">+1</button>
-                <button onclick="changeMutationRate(10)" type="button" class="btn btn-primary">+10</button>
-            </div>
-            <div id = "carsReview">
-                <input id="bestCar" autocomplete="off" disabled/>
-                <input id="selectedCar" autocomplete="off" disabled/>
-            </div>
-            <script src="gnetwork.js"></script>
-            <script src="utils.js"></script>
-            <script src="road.js"></script>
-            <script src="car.js"></script>
-            <script src="sensors.js"></script>
-            <script src="controls.js"></script>
-            <script src="main.js"></script>
         </div>
+        <div id="saveButtons">
+            <button onclick="reset_map()" type="button" class="btn btn-primary">Reset Map</button>
+            <button id="startBtn" onclick="start()" type="button" class="btn btn-primary">Start</button>
+            <button onclick="save_gnet()" type="button" class="btn btn-primary">Save</button>
+            <button onclick="discard_gnet()" type="button" class="btn btn-primary">Delete</button>
+            <button onclick="pause_resume()" type="button" class="btn btn-primary">Pause / Resume</button>
+        </div>
+        <div id="mutationButtons">
+            <button onclick="changeMutationRate(-10)" type="button" class="btn btn-primary">-10</button>
+            <button onclick="changeMutationRate(-1)" type="button" class="btn btn-primary">-1</button>
+            <input id="mutationRate" value = 30 autocomplete="off"/>
+            <button onclick="changeMutationRate(1)" type="button" class="btn btn-primary">+1</button>
+            <button onclick="changeMutationRate(10)" type="button" class="btn btn-primary">+10</button>
+        </div>
+        <div id = "carsReview">
+            <input id="bestCar" autocomplete="off" disabled/>
+            <input id="selectedCar" autocomplete="off" disabled/>
+        </div>
+        
+        <script src="gnetwork.js"></script>
+        <script src="utils.js"></script>
+        <script src="road.js"></script>
+        <script src="car.js"></script>
+        <script src="sensors.js"></script>
+        <script src="controls.js"></script>
+        <script src="main.js"></script>
     </body>
 </html> 

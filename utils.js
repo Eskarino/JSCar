@@ -1,19 +1,34 @@
-function draw_segment(ctx, segment, line_width = 5, line_color = "gray") {
+function draw_segment(ctx, segment, line_width, line_color, dashed = false) {
     x1 = segment[0][0];
     y1 = segment[0][1];
     x2 = segment[1][0];
     y2 = segment[1][1];
-    draw_line(ctx, x1, y1, x2, y2, line_width, line_color)
+    draw_line(ctx, x1, y1, x2, y2, line_width, line_color, dashed)
 }
 
-function draw_line(ctx, x1, y1, x2, y2, line_width = 5, line_color = "gray") {
+function draw_line(ctx, x1, y1, x2, y2, line_width, line_color, dashed) {
     ctx.line_width = line_width;
     ctx.strokeStyle = line_color;
-
+    if(dashed){
+        ctx.setLineDash([20, 20]);
+    }else{
+        ctx.setLineDash([]);
+    }
     ctx.beginPath();
     ctx.moveTo(x1, y1);
     ctx.lineTo(x2, y2);
     ctx.stroke();
+}
+
+function fill_polygon(ctx, polygon, color){
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(polygon[0][0][0], polygon[0][0][1]);
+    for(i = 0; i<polygon.length; i++){
+        ctx.lineTo(polygon[i][0][0], polygon[i][0][1]);
+    }
+    ctx.closePath();
+    ctx.fill();
 }
 
 function lerp(a, b, t){
@@ -135,3 +150,8 @@ function get_gates(border_int, border_ext, segment, gates_per_segment, distance)
     }
     return gates;
 }
+
+function random_choice(choices) {
+    var index = Math.floor(Math.random() * choices.length);
+    return choices[index];
+  }

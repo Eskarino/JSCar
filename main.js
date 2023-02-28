@@ -1,20 +1,23 @@
 const canvas = document.getElementById("theCanvas");
 canvas.height = 1000;
-canvas.width = 1500;
+canvas.width = 3000;
 const ctx = canvas.getContext('2d');
+const road_width = 100
 
 const DOM_selected_car = document.getElementById("selectedCar");
 const DOM_best_car_counter = document.getElementById("bestCar");
 const DOM_selected_car_counter = document.getElementById("selectedCar");
+const startBtn = document.getElementById('startBtn');
 let animation_ongoing = false;
 
 const points = 7;
 
 let road = new Road(ctx, points, canvas.height, canvas.width);
 
-const nb_cars = 50;
+const nb_cars = 100;
 let cars = generateCars(nb_cars);
 let car_table = create_car_table(nb_cars);
+road.draw()
 
 discard_gnet()
 
@@ -25,12 +28,12 @@ let selected_car = null;
 let paused = false;
 check_clicked_car()
 
-road.draw();
+//road.draw();
 let loop_counter = 0;
 
 function start(){
     if (animation_ongoing){
-        animation_ongoing = !animation_ongoing
+        animation_ongoing = !animation_ongoing;
     } else {
         selected_car = null;
         DOM_selected_car.value = '';
@@ -61,11 +64,11 @@ function loop() {
                 ...cars.map(c=>car_table[c.id].reward)
         ));
 
-        DOM_best_car_counter.value = best_car.id
-        if (selected_car){
-            DOM_selected_car_counter.value = selected_car.id
-        }
-        loop_counter+= 1
+    DOM_best_car_counter.value = best_car.id
+    if (selected_car){
+        DOM_selected_car_counter.value = selected_car.id
+    }
+    loop_counter+= 1
     }
 
     if (animation_ongoing){
@@ -101,7 +104,7 @@ function calculate_reward(car, car_table){
             }
         }
     }
-    car_table[car.id].reward += car.speed/1000000;
+    car_table[car.id].reward += car.speed/1000;
 }
 
 function car_init(){
@@ -113,7 +116,7 @@ function car_init(){
         for (let i=0; i<cars.length; i++){
             cars[i].net = JSON.parse(localStorage.getItem('best_car'));
             if(i!=0){
-                GNet.mutate(cars[i].net, mutation_rate) //(i*3)
+                GNet.mutate(cars[i].net, mutation_rate)
             }
         }
     }

@@ -103,16 +103,17 @@ class Road{
     }
 
     draw() {
-        for (let i = 0; i < this.points.length; i++) {
-            let point1 = this.points[i];
-            let point2 = this.points[(i+1)%this.points.length];
-            draw_line(this.ctx, point1[0], point1[1], point2[0], point2[1]);
+        fill_polygon(this.ctx, this.ext_border, 'grey');
+        fill_polygon(this.ctx, this.int_border, 'green');
+
+        for (let i = 0; i < this.segments.length; i++) {
+            draw_segment(this.ctx, this.segments[i], 10, "white", true);
         }
         for (let i = 0; i < this.borders.length; i++){
-            draw_segment(this.ctx, this.borders[i], 5, "red");
+            draw_segment(this.ctx, this.borders[i], 10, "white");
         }
-        for (let i = 0; i < this.gates.length; i++){
-            draw_segment(this.ctx, this.gates[i], 5, "yellow");
-        }
+        // for (let i = 0; i < this.gates.length; i++){
+        //     draw_segment(this.ctx, this.gates[i], 5, "yellow");
+        // }
     }
 }

@@ -16,11 +16,11 @@ class Car{
         this.acceleration = 0.05;
         this.friction = 0.02
         this.steering_capacity = 0.03;
-        this.max_speed = 3
+        this.max_speed = 5
 
         this.drift_momentum = 0;
         this.drift_friction = 0.90;
-        this.drift_speed = 2;
+        this.drift_speed = 3;
 
         this.damaged = false;
 
@@ -182,7 +182,7 @@ class Car{
         let ctx = this.ctx;
 
         if(this.damaged){
-            ctx.fillStyle = 'gray';
+            ctx.fillStyle = 'red';
         } else {
             ctx.fillStyle = 'black';
         }
@@ -191,7 +191,7 @@ class Car{
             ctx.globalAlpha = 0.2;
         } else {
             ctx.globalAlpha = 1;
-            ctx.fillStyle = 'green';
+            ctx.fillStyle = 'blue';
         }
         
         ctx.beginPath();

@@ -1,15 +1,15 @@
 body{
     margin: 0;
-    background-color: bisque;
+    background-color: white;
     overflow: hidden;
     text-align: center;
 }
 
 #theCanvas{
-    background-color: white;
+    background-color: green;
     width: 100%;
 }
 
 div{
-    margin:10px;
+    margin:20px;
  }
