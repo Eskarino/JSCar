@@ -46,6 +46,35 @@ class Road{
             }
         }
         this.segments.push([this.points[this.points.length-1],this.points[0]]);
+        this.#smooth_turns()
+    }
+
+    #smooth_turns(){
+        let int_segments = []
+        for (let i=0; i<this.segments.length; i++){
+            let x1_first = this.segments[i][0][0]
+            let y1_first = this.segments[i][0][1]
+            let x2_first = this.segments[i][1][0]
+            let y2_first = this.segments[i][1][1]
+            
+            let x1_second = this.segments[(i+1)%this.segments.length][0][0]
+            let y1_second = this.segments[(i+1)%this.segments.length][0][1]
+            let x2_second = this.segments[(i+1)%this.segments.length][1][0]
+            let y2_second = this.segments[(i+1)%this.segments.length][1][1]
+
+            let x1_middle = x1_first + (x2_first-x1_first)*2/3
+            let y1_middle = y1_first + (y2_first-y1_first)*2/3
+            let x2_middle = x1_second + (x2_second-x1_second)*1/3
+            let y2_middle = y1_second + (y2_second-y1_second)*1/3
+
+            int_segments.push([[x1_middle, y1_middle], [x2_middle, y2_middle]])
+        }
+
+        let new_segments = [];
+        for (let i =0; i<int_segments.length; i++){
+            new_segments.push(int_segments[i], [int_segments[i][1], int_segments[(i+1)%int_segments.length][0]]);
+        }
+        this.segments = new_segments;
     }
 
     #create_tiles(){
@@ -135,8 +164,8 @@ class Road{
         for (let i = 0; i < this.borders.length; i++){
             draw_segment(this.ctx, this.borders[i], 10, "white");
         }
-        for (let i = 0; i < this.gates.length; i++){
-            draw_segment(this.ctx, this.gates[i], 5, "yellow");
-        }
+        // for (let i = 0; i < this.gates.length; i++){
+        //     draw_segment(this.ctx, this.gates[i], 5, "yellow");
+        // }
     }
 }
