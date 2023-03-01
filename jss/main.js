@@ -1,6 +1,6 @@
 const canvas = document.getElementById("theCanvas");
 canvas.height = 1000;
-canvas.width = 2000;
+canvas.width = 1500;
 const ctx = canvas.getContext('2d');
 const road_width = 100
 
@@ -22,8 +22,6 @@ discard_gnet()
 let best_car = cars[0];
 let selected_car = null;
 
-
-let paused = false;
 check_clicked_car()
 
 let loop_counter = 0;
@@ -34,7 +32,6 @@ function start(){
     } else {
         selected_car = null;
         DOM_selected_car.value = '';
-        paused = false;
         loop_counter = 0;
         car_init();
         animation_ongoing = true;
@@ -51,7 +48,7 @@ function loop() {
         let car_to_draw = best_car;
         if(selected_car) {car_to_draw=selected_car;}
         cars[i].draw(car_to_draw);
-        if (!paused && !cars[i].damaged){
+        if (!cars[i].damaged){
             cars[i].update();
             calculate_reward(cars[i], car_table)   
         }
@@ -61,9 +58,9 @@ function loop() {
                 ...cars.map(c=>car_table[c.id].reward)
         ));
 
-    DOM_best_car_counter.value = best_car.id
+    DOM_best_car_counter.innerText = 'Best car: ' + String(best_car.id) + ' | Reward: ' + String(~~car_table[best_car.id].reward)
     if (selected_car){
-        DOM_selected_car_counter.value = selected_car.id
+        DOM_selected_car_counter.innerText = 'Selected: ' + String(selected_car.id) + ' | Reward: ' + String(~~car_table[selected_car.id].reward)
     }
     loop_counter+= 1
     }
@@ -110,11 +107,12 @@ function car_init(){
     car_table = create_car_table(nb_cars)
     best_car = cars[0];
     let mutation_rate = document.getElementById("mutationRate").value/100;
+    let mutation_prob = document.getElementById("mutationProb").value/100;
     if (localStorage.getItem('best_car')){
         for (let i=0; i<cars.length; i++){
             cars[i].net = JSON.parse(localStorage.getItem('best_car'));
             if(i!=0){
-                GNet.mutate(cars[i].net, mutation_rate)
+                GNet.mutate(cars[i].net, mutation_rate, mutation_prob)
             }
         }
     }
@@ -132,6 +130,7 @@ function save_gnet(){
 
 function discard_gnet(){
     localStorage.removeItem('best_car');
+    DOM_best_car_counter.innerText = 'Best car: | Reward: '
 }
 
 function reset_map(){
@@ -144,19 +143,6 @@ function reset_map(){
 function pause_resume(){
     paused = !paused;
     loop()
-}
-
-function changeMutationRate(val){
-    let curr_val = document.getElementById("mutationRate").value;
-    let new_val = Number(curr_val) + val;
-    if (new_val > 100){
-        new_val = 100;
-    }
-    if (new_val<0){
-        new_val = 0;
-    }
-
-    document.getElementById("mutationRate").value = new_val;
 }
 
 function check_clicked_car(){

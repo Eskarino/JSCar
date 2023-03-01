@@ -1,0 +1,53 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <title>RL Lab - Car game</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+    <body>
+        <div class="main">
+            <div id="canvasCtn">
+                <canvas id="theCanvas"></canvas>
+            </div>
+            <div class="buttonsSection">
+                <div id="saveButtons" class="buttonsSubsection">
+                    <button id="startBtn" onclick="start()" type="button" class="btn btn-primary">Start</button>
+                    <button onclick="reset_map()" type="button" class="btn btn-primary">Reset Map</button>
+                </div>
+                <div id="mutationButtons" class="buttonsSubsection">
+                    <div class = "mutation">
+                        <p>Mutation amplitude</p>
+                        <input type="range" id="mutationRate" min="0" max="100" value="50" class="slider"/>
+                    </div>
+                    <div class = "mutation">
+                        <p>Mutation probability</p>
+                        <input type="range" id="mutationProb" min="0" max="100" value="50" class="slider"/>
+                    </div>
+                </div>
+                <div id = "ModelSaving" class="buttonsSubsection">
+                    <button onclick="save_gnet()" type="button" class="btn btn-primary">Save model</button>
+                    <button onclick="discard_gnet()" type="button" class="btn btn-primary">Delete model</button>
+                </div>
+                <div id = "carsInfo" class="buttonsSubsection">
+                    <p id="bestCar">Best Car: | Reward: </p>
+                    <p id="selectedCar">Selected: | Reward: </p>
+                </div>
+            </section>
+        </div>
+
+        <script src="jss/gnetwork.js"></script>
+        <script src="jss/utils.js"></script>
+        <script src="jss/road.js"></script>
+        <script src="jss/car.js"></script>
+        <script src="jss/sensors.js"></script>
+        <script src="jss/controls.js"></script>
+        <script src="jss/main.js"></script>
+    </body>
+</html> 
