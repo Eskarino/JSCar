@@ -11,7 +11,7 @@ class Car{
         this.height = 25;
 
         this.speed = 0;
-        this.angle = 0;
+        this.angle = road.starting_angle;
 
         this.acceleration = 0.05;
         this.friction = 0.02

@@ -4,9 +4,7 @@ class Road{
         this.height = height;
         this.width = width;
 
-        this.starting_x = 100;
-        this.starting_y = height/2;
-        this.points = [[this.starting_x, this.starting_y]];
+        this.points = [];
         this.segments = []
 
         this.ext_border = []
@@ -16,17 +14,19 @@ class Road{
 
         this.road_width = 50;
         this.#create_road();
+        this.draw()
     }
 
     #create_road() {
         this.#define_segments();
         this.#create_borders();
         this.#create_reward_gates();
+        this.#calculate_starting_pos();
     }
 
     #define_segments() {
         this.squares_in_height = 2;
-        this.squares_in_width = 4;
+        this.squares_in_width = 5;
         this.border_size = 150;
         this.space_between_squares = 100;
         this.square_height_size = (this.height - 2*this.border_size - (this.squares_in_height - 1)*this.space_between_squares)/this.squares_in_height;
@@ -41,7 +41,9 @@ class Road{
             let point_x = x_topleft + Math.random()*this.square_width_size;
             let point_y = y_topleft + Math.random()*this.square_height_size;
             this.points.push([point_x, point_y]);
-            this.segments.push([this.points[i],this.points[i+1]]);
+            if(i>0){
+                this.segments.push([this.points[i-1],this.points[i]]);
+            }
         }
         this.segments.push([this.points[this.points.length-1],this.points[0]]);
     }
@@ -102,6 +104,16 @@ class Road{
         this.borders = this.ext_border.concat(this.int_border);
     }
 
+    #calculate_starting_pos(){
+        let x1 = this.segments[0][0][0];
+        let y1 = this.segments[0][0][1];
+        let x2 = this.segments[0][1][0];
+        let y2 = this.segments[0][1][1];
+        this.starting_x = (x1+x2)/2;
+        this.starting_y = (y1+y2)/2;
+        this.starting_angle = -Math.PI/2 - Math.atan((y2-y1)/(x2-x1));
+    }
+
     #create_reward_gates(){
         this.gates = [];
         for(let i = 0; i < this.segments.length; i++){
@@ -123,8 +135,8 @@ class Road{
         for (let i = 0; i < this.borders.length; i++){
             draw_segment(this.ctx, this.borders[i], 10, "white");
         }
-        // for (let i = 0; i < this.gates.length; i++){
-        //     draw_segment(this.ctx, this.gates[i], 5, "yellow");
-        // }
+        for (let i = 0; i < this.gates.length; i++){
+            draw_segment(this.ctx, this.gates[i], 5, "yellow");
+        }
     }
 }

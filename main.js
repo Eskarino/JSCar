@@ -1,6 +1,6 @@
 const canvas = document.getElementById("theCanvas");
 canvas.height = 1000;
-canvas.width = 3000;
+canvas.width = 2000;
 const ctx = canvas.getContext('2d');
 const road_width = 100
 
@@ -12,10 +12,10 @@ let animation_ongoing = false;
 
 let road = new Road(ctx, canvas.height, canvas.width);
 
-const nb_cars = 100;
+const nb_cars = 50;
 let cars = generateCars(nb_cars);
 let car_table = create_car_table(nb_cars);
-road.draw()
+
 
 discard_gnet()
 
@@ -26,7 +26,6 @@ let selected_car = null;
 let paused = false;
 check_clicked_car()
 
-//road.draw();
 let loop_counter = 0;
 
 function start(){
@@ -78,6 +77,7 @@ function generateCars(nb_cars){
     let cars = [];
     for(let i = 0; i < nb_cars; i++){
         cars.push(new Car(ctx, road, i, 'Virtual'))
+        cars[cars.length-1].draw(cars[cars.length-1])
     }
     return cars
 }
@@ -85,7 +85,7 @@ function generateCars(nb_cars){
 function create_car_table(nb_cars){
     let car_table = [];
     for(i = 0; i < nb_cars; i++){
-        one_car = {car_id: i, reward: 0, next_gate: 0};
+        one_car = {car_id: i, reward: 0, next_gate: 4};
         car_table.push(one_car);        
     }
     return car_table
@@ -136,7 +136,7 @@ function discard_gnet(){
 
 function reset_map(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    road = new Road(ctx, points, canvas.height, canvas.width);
+    road = new Road(ctx, canvas.height, canvas.width);
     road.draw();
     cars = []
 }
