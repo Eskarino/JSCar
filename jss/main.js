@@ -17,7 +17,7 @@ let cars = generateCars(nb_cars);
 let car_table = create_car_table(nb_cars);
 
 let stop_training = false;
-let reward_limit = 1500;
+let reward_limit = 1000;
 
 
 discard_gnet()
@@ -95,7 +95,7 @@ function startXtimes(){
             save_gnet();
         }
 
-        if (best_reward < 100 && best_reward - last_reward < 1 && i%20==0){
+        if (best_reward < 150 && best_reward - last_reward < 1 && i%20==0){
             discard_gnet();
             if(best_reward<100){
                 best_car = null;
@@ -123,10 +123,14 @@ function one_race(){
                 calculate_reward(cars[i], car_table);
             }
         }
-        if (car_table[race_best_car.id].reward > reward_limit || loop_counter > 1000 + 10*car_table[race_best_car.id].reward || loop_counter > 10000){
+        if (car_table[race_best_car.id].reward > reward_limit || loop_counter > 1000 + 5*car_table[race_best_car.id].reward || loop_counter > 10000){
             finished = true;
         }
         loop_counter++;
+        let stopped_cars = cars.filter(c => c.speed == 0);
+        if(loop_counter > 100 && stopped_cars.length==nb_cars){
+            finished = true;
+        }
     }
 
     race_best_car  = cars.find(
