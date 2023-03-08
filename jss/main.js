@@ -7,7 +7,6 @@ const road_width = 100
 const DOM_selected_car = document.getElementById("selectedCar");
 const DOM_best_car_counter = document.getElementById("bestCar");
 const DOM_selected_car_counter = document.getElementById("selectedCar");
-const stop_training_button = document.getElementById("selectedCar");
 let animation_ongoing = false;
 
 let road = new Road(ctx, canvas.height, canvas.width);
@@ -105,6 +104,7 @@ function startXtimes(){
         } else if (i%20==0){
             last_reward = best_reward;
         }
+        DOM_selected_car_counter.innerText = 'Iteration ' + String(i) + ' || Best reward: ' + String(~~best_reward);
     }
     save_gnet()
     start()

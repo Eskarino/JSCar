@@ -164,6 +164,8 @@ class Road{
         for (let i = 0; i < this.borders.length; i++){
             draw_segment(this.ctx, this.borders[i], 10, "white");
         }
+
+        draw_segment(this.ctx, this.gates[5], 5, "black");
         // for (let i = 0; i < this.gates.length; i++){
         //     draw_segment(this.ctx, this.gates[i], 5, "yellow");
         // }
