@@ -101,11 +101,11 @@ function startTraining(){
     road.draw();
     race_counter = 0;
     animation_ongoing = false;
-    intervalId = setInterval(aRace, 10);
+    intervalId = setInterval(one_race, 10);
 }
 
 
-function aRace(){
+function one_race(){
     car_table = create_car_table(nb_cars);
     loop_counter = 0;
     car_init();
