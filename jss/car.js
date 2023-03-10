@@ -186,12 +186,13 @@ class Car{
         } else {
             ctx.fillStyle = 'black';
         }
-
-        if(this.id!=best_car.id){
-            ctx.globalAlpha = 0.2;
-        } else {
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = 'blue';
+        ctx.globalAlpha = 0.2;
+        
+        if (best_car){
+            if(this.id==best_car.id){
+                ctx.globalAlpha = 1;
+                ctx.fillStyle = 'blue';
+            }
         }
         
         ctx.beginPath();

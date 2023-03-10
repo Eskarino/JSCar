@@ -15,13 +15,13 @@ let road = new Road(ctx, canvas.height, canvas.width);
 let nb_cars = 50;
 let cars = generateCars(nb_cars);
 let car_table = create_car_table(nb_cars);
-let reward_limit = 1000;
-
-
-discard_gnet()
+let reward_limit = 500;
+let training_iter = 100;
 
 let best_car = null;
 let selected_car = null;
+
+discard_gnet()
 
 check_clicked_car()
 
@@ -83,7 +83,7 @@ function loop(visible) {
 }
 
 function check_finish_conditions(){
-    if (car_table[best_car.id].reward > reward_limit || loop_counter > 1000 + 5*car_table[best_car.id].reward || loop_counter > 5000){
+    if (car_table[best_car.id].reward > reward_limit || loop_counter > 1000 + 3*car_table[best_car.id].reward || loop_counter > 5000){
         return true;
     }
     let stopped_cars = cars.filter(c => c.speed == 0);
@@ -121,7 +121,7 @@ function one_race(){
         save_gnet();
     }
 
-    if (best_reward < 150 && best_reward - last_best_reward < 1 && race_counter%20==0 && race_counter!=0){
+    if (best_reward < 150 && best_reward - last_best_reward < 1 && race_counter%20==0 && race_counter!=0 && race_counter!=training_iter){
         discard_gnet();
         best_car = null;
         best_reward = 0;
@@ -130,8 +130,9 @@ function one_race(){
         last_best_reward = best_reward;
     }
 
-    if (race_counter >= 100){
+    if (race_counter >= training_iter){
         clearInterval(intervalId)
+        start()
     }
     race_counter += 1;
 }
@@ -204,7 +205,8 @@ function save_gnet(){
 function discard_gnet(){
     localStorage.removeItem('best_car');
     DOM_best_car_counter.innerText = 'Best car: | Reward: '
-    console.log('Discarded')
+    console.log('Discarded');
+    best_car = null;
 }
 
 function reset_map(){
