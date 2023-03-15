@@ -16,7 +16,7 @@ let nb_cars = 50;
 let cars = generateCars(nb_cars);
 let car_table = create_car_table(nb_cars);
 let reward_limit = 500;
-let training_iter = 100;
+let training_iter = 1000;
 
 let best_car = null;
 let selected_car = null;
@@ -83,7 +83,7 @@ function loop(visible) {
 }
 
 function check_finish_conditions(){
-    if (car_table[best_car.id].reward > reward_limit || loop_counter > 1000 + 3*car_table[best_car.id].reward || loop_counter > 5000){
+    if (car_table[best_car.id].reward > reward_limit || loop_counter > 1000 + 5*car_table[best_car.id].reward || loop_counter > 5000){
         return true;
     }
     let stopped_cars = cars.filter(c => c.speed == 0);
@@ -106,7 +106,6 @@ function startTraining(){
 
 
 function one_race(){
-    car_table = create_car_table(nb_cars);
     loop_counter = 0;
     car_init();
     let finished = false;
@@ -173,21 +172,21 @@ function calculate_reward(car, car_table){
 function car_init(){
     cars = generateCars(nb_cars);
     
+    if(!best_car){
+        best_car = cars[0];
+    } else {
+        cars[0].net = best_car.net;
+    }
     car_table = create_car_table(nb_cars)
     let mutation_rate = document.getElementById("mutationRate").value/100;
     let mutation_prob = document.getElementById("mutationProb").value/100;
     if (localStorage.getItem('best_car')){
         for (let i=0; i<cars.length; i++){
-            cars[i].net = JSON.parse(localStorage.getItem('best_car'));
             if(i!=0){
+                cars[i].net = JSON.parse(localStorage.getItem('best_car'));
                 GNet.mutate(cars[i].net, mutation_rate, mutation_prob)
             }
         }
-    }
-    if(!best_car){
-        best_car = cars[0];
-    } else {
-        cars[0].net = best_car.net;
     }
 }
 
@@ -217,8 +216,13 @@ function reset_map(){
 }
 
 function stop_training(){
-    clearInterval(intervalId);
-    save_gnet();
+    if (!animation_ongoing){
+        clearInterval(intervalId);
+        if (localStorage.getItem('best_car')){
+            save_gnet();
+        }
+        start();
+    }
 }
 
 function check_clicked_car(){
