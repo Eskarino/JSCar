@@ -1,43 +1,90 @@
 body{
-    margin: 0;
-    background-color: rgb(194, 194, 194);
+    background-color:white;
     overflow: hidden;
     text-align: center;
+    margin: 0;
+    align-items: center;
+    justify-items: center;
 }
 
 #theCanvas{
     background-color: green;
-    width: 80%;
+    width: 100%;
+    height: 100%;
+    border-style: inset;
+    border-color: black black grey grey;
+}
+
+#canvasCtn{
+    margin-top: 5%;
+    max-height: 60vh;
+    max-width: calc(1.5*60vh);
 }
 
 div{
-    margin:20px;
+    margin: auto;
 }
 
 .main{
+    background-color: rgb(194, 194, 194);
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
+    max-height: 100vh;
+    max-width: calc(1.5*70vh);
+    align-items: center;
+    justify-items: center;
+    margin: auto;
 }
  
-#slider {
-    width: 20%;
+.mutation {
+    width: 80%;
 }
 
 .buttonsSection {
-    margin-left: auto;
-    margin-right: auto;
+    justify-content: space-between;
+    align-content: space-between;
+    display: flex;
     flex-wrap: wrap;
+    width: 100%;
+    max-width: calc(1.5*60vh);
 }
 
 .buttonsSubsection {
     display: flex;
+    margin-top: 10px;
+    margin-bottom: 10px;
     flex-direction: column;
     align-items: center;
     flex-basis: 20%;
+    width: 100%;
+    border-style: inset;
+    border-color: black black grey grey;
+    align-content: space-evenly;
+    justify-content: space-evenly;
+}
+
+.infoSubsection {
+    display: flex;
+    width: 100%;
+    max-width: calc(1.5*60vh);
+    border-style: inset;
+    border-color: black black grey grey;
 }
 
 .btn {
-    width: 60%;
-    margin-top: 5%;
-    min-width: 100px;
+    width: 80%;
+    margin: 5% 5% 5% 5%;
+    min-width: 80px;
+}
+
+p {
+    margin: 5px 10px 5px;
+}
+
+h5 {
+    font-size: 15px;
+    font-variant: small-caps;
+    margin-top: 5px;
+    text-decoration-line: underline;
 }

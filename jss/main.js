@@ -4,9 +4,7 @@ canvas.width = 1500;
 const ctx = canvas.getContext('2d');
 const road_width = 100
 
-const DOM_selected_car = document.getElementById("selectedCar");
-const DOM_best_car_counter = document.getElementById("bestCar");
-const DOM_selected_car_counter = document.getElementById("selectedCar");
+const DOM_infos = document.getElementById("infos");
 let animation_ongoing = false;
 let frame_id;
 
@@ -24,6 +22,7 @@ let forever_best_reward = 0;
 let selected_car = null;
 
 discard_gnet()
+DOM_infos.innerText = '...'
 
 check_clicked_car()
 
@@ -40,15 +39,14 @@ function start(){
         cancelAnimationFrame(frame_id)
     } else if (training_ongoing){
         stop_training()
-    } else {
-        DOM_selected_car_counter.innerText = 'Selected: | Reward: '
-        selected_car = null;
-        DOM_selected_car.value = '';
-        loop_counter = 0;
-        car_init();
-        animation_ongoing = true;
-        loop(true);
     }
+    DOM_infos.innerText = '...'
+    selected_car = null;
+    DOM_infos.value = '';
+    loop_counter = 0;
+    car_init();
+    animation_ongoing = true;
+    loop(true);
 }
 
 function loop(visible) {
@@ -75,9 +73,9 @@ function loop(visible) {
                 ...cars.map(c=>car_table[c.id].reward)
         ));
     }
-    DOM_best_car_counter.innerText = 'Best car: ' + String(best_car.id) + ' | Reward: ' + String(~~car_table[best_car.id].reward)
+    DOM_infos.innerText = 'Best car: ' + String(best_car.id) + ' | Reward: ' + String(~~car_table[best_car.id].reward)
     if (selected_car){
-        DOM_selected_car_counter.innerText = 'Selected: ' + String(selected_car.id) + ' | Reward: ' + String(~~car_table[selected_car.id].reward)
+        DOM_infos.innerText = 'Selected: ' + String(selected_car.id) + ' | Reward: ' + String(~~car_table[selected_car.id].reward)
     }
     loop_counter++;
     
@@ -127,7 +125,7 @@ function one_race(){
     }
 
     console.log('Iteration ' + String(race_counter) + ' || Best reward: ' + String(~~best_reward))
-    DOM_selected_car_counter.innerText = 'Iteration ' + String(race_counter) + ' || Best reward: ' + String(~~best_reward)
+    DOM_infos.innerText = 'Training ongoing - Iteration ' + String(race_counter) + ' || Best reward: ' + String(~~best_reward)
 
     if (race_counter%10==0 && race_counter!=0){
         save_gnet();
@@ -142,7 +140,11 @@ function one_race(){
         last_best_reward = best_reward;
     }
 
-    if (race_counter >= training_iter ||best_reward == reward_limit){
+    if (race_counter >= training_iter){
+        DOM_infos.innerText = 'Failed after 1000 races :('
+        stop_training()
+    } else if (best_reward >= reward_limit) {
+        DOM_infos.innerText = 'TRAINING COMPLETED'
         stop_training()
     }
 
@@ -209,14 +211,15 @@ function save_gnet(){
             JSON.stringify(selected_car.net));
         } else {
             localStorage.setItem('best_car', 
-                JSON.stringify(best_car.net));
+                JSON.stringify(forever_best_car.net));
     }
     console.log('Saved')
+    DOM_infos.innerText = 'Network saved - Iteration ' + String(race_counter) + ' || Best reward: ' + String(~~best_reward);
 }
 
 function discard_gnet(){
     localStorage.removeItem('best_car');
-    DOM_best_car_counter.innerText = 'Best car: | Reward: '
+    DOM_infos.innerText = 'Network discarded'
     console.log('Discarded');
     best_car = null;
     forever_best_car = null;

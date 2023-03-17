@@ -16,30 +16,37 @@
             <div id="canvasCtn">
                 <canvas id="theCanvas"></canvas>
             </div>
+            <div id = "carsInfo" class="infoSubsection">
+                <p id="fix-info">Information panel: </p>
+                <p id="infos">...</p>
+            </div>
             <div class="buttonsSection">
                 <div id="saveButtons" class="buttonsSubsection">
+                    <h5>Play</h5>
                     <button id="startBtn" onclick="start()" type="button" class="btn btn-primary">Start</button>
-                    <button id="startXtimes" onclick="startTraining()" type="button" class="btn btn-primary">Autotrainer</button>
-                    <button id="stoptraining" onclick="stop_training()" type="button" class="btn btn-primary">Stop training</button>
-                    <button onclick="reset_map()" type="button" class="btn btn-primary">Reset Map</button>
+                    <button onclick="reset_map()" type="button" class="btn btn-primary">Reset</button>
                 </div>
+                <div id="trainingButtons" class="buttonsSubsection">
+                    <h5>Training</h5>
+                    <button id="startXtimes" onclick="startTraining()" type="button" class="btn btn-primary">Auto</button>
+                    <button id="stoptraining" onclick="stop_training()" type="button" class="btn btn-primary">Stop</button>
+                </div>
+
                 <div id="mutationButtons" class="buttonsSubsection">
+                    <h5>Mutation</h5>
                     <div class = "mutation">
-                        <p>Mutation amplitude</p>
+                        <p>Amplitude</p>
                         <input type="range" id="mutationRate" min="0" max="100" value="50" class="slider"/>
                     </div>
                     <div class = "mutation">
-                        <p>Mutation probability</p>
+                        <p>Probability</p>
                         <input type="range" id="mutationProb" min="0" max="100" value="50" class="slider"/>
                     </div>
                 </div>
                 <div id = "ModelSaving" class="buttonsSubsection">
-                    <button onclick="save_gnet()" type="button" class="btn btn-primary">Save model</button>
-                    <button onclick="discard_gnet()" type="button" class="btn btn-primary">Delete model</button>
-                </div>
-                <div id = "carsInfo" class="buttonsSubsection">
-                    <p id="bestCar">Best Car: | Reward: </p>
-                    <p id="selectedCar">Selected: | Reward: </p>
+                    <h5>Model</h5>
+                    <button onclick="save_gnet()" type="button" class="btn btn-primary">Save</button>
+                    <button onclick="discard_gnet()" type="button" class="btn btn-primary">Delete</button>
                 </div>
             </div>
         </div>
