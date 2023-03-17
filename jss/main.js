@@ -19,6 +19,8 @@ let reward_limit = 500;
 let training_iter = 1000;
 
 let best_car = null;
+let forever_best_car = null;
+let forever_best_reward = 0;
 let selected_car = null;
 
 discard_gnet()
@@ -29,19 +31,24 @@ let loop_counter = 0;
 let last_best_reward = 0;
 let intervalId;
 let race_counter = 0;
+let training_ongoing = false;
 
 
 function start(){
     if (animation_ongoing) {
+        animation_ongoing = false;
         cancelAnimationFrame(frame_id)
+    } else if (training_ongoing){
+        stop_training()
+    } else {
+        DOM_selected_car_counter.innerText = 'Selected: | Reward: '
+        selected_car = null;
+        DOM_selected_car.value = '';
+        loop_counter = 0;
+        car_init();
+        animation_ongoing = true;
+        loop(true);
     }
-    DOM_selected_car_counter.innerText = 'Selected: | Reward: '
-    selected_car = null;
-    DOM_selected_car.value = '';
-    loop_counter = 0;
-    car_init();
-    animation_ongoing = true;
-    loop(true);
 }
 
 function loop(visible) {
@@ -97,6 +104,7 @@ function startTraining(){
     if (animation_ongoing) {
         cancelAnimationFrame(frame_id)
     }
+    training_ongoing = true;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     road.draw();
     race_counter = 0;
@@ -113,6 +121,11 @@ function one_race(){
         finished = loop(false);
     }
     best_reward = car_table[best_car.id].reward;
+    if (best_reward > forever_best_reward){
+        forever_best_reward = best_reward;
+        forever_best_car = best_car;
+    }
+
     console.log('Iteration ' + String(race_counter) + ' || Best reward: ' + String(~~best_reward))
     DOM_selected_car_counter.innerText = 'Iteration ' + String(race_counter) + ' || Best reward: ' + String(~~best_reward)
 
@@ -129,10 +142,10 @@ function one_race(){
         last_best_reward = best_reward;
     }
 
-    if (race_counter >= training_iter){
-        clearInterval(intervalId)
-        start()
+    if (race_counter >= training_iter ||best_reward == reward_limit){
+        stop_training()
     }
+
     race_counter += 1;
 }
 
@@ -172,10 +185,10 @@ function calculate_reward(car, car_table){
 function car_init(){
     cars = generateCars(nb_cars);
     
-    if(!best_car){
+    if(!forever_best_car){
         best_car = cars[0];
     } else {
-        cars[0].net = best_car.net;
+        cars[0].net = forever_best_car.net;
     }
     car_table = create_car_table(nb_cars)
     let mutation_rate = document.getElementById("mutationRate").value/100;
@@ -206,6 +219,9 @@ function discard_gnet(){
     DOM_best_car_counter.innerText = 'Best car: | Reward: '
     console.log('Discarded');
     best_car = null;
+    forever_best_car = null;
+    best_reward = 0;
+    forever_best_reward = 0;
 }
 
 function reset_map(){
@@ -216,11 +232,12 @@ function reset_map(){
 }
 
 function stop_training(){
-    if (!animation_ongoing){
+    if (!animation_ongoing && training_ongoing){
         clearInterval(intervalId);
         if (localStorage.getItem('best_car')){
             save_gnet();
         }
+        training_ongoing = false;
         start();
     }
 }
