@@ -1,5 +1,5 @@
 body{
-    background-color:white;
+    background-image: url("imgs/bg.jpg");
     overflow: hidden;
     text-align: center;
     margin: 0;
@@ -35,6 +35,7 @@ div{
     align-items: center;
     justify-items: center;
     margin: auto;
+    margin-top: 2%;
 }
  
 .mutation {
