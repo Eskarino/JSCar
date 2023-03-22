@@ -19,6 +19,7 @@
             <div id = "carsInfo" class="infoSubsection">
                 <p id="fix-info">Information panel: </p>
                 <p id="infos">...</p>
+                <img id= "help" src="imgs/help.png" alt="Help" onclick="overlay_on()">
             </div>
             <div class="buttonsSection">
                 <div id="saveButtons" class="buttonsSubsection">
@@ -51,6 +52,10 @@
             </div>
         </div>
 
+        <div id="overlay" onclick="overlay_off()">
+            <div id="overlay-text">Coucou</div>
+        </div> 
+
         <script src="jss/gnetwork.js"></script>
         <script src="jss/utils.js"></script>
         <script src="jss/road.js"></script>
@@ -58,5 +63,6 @@
         <script src="jss/sensors.js"></script>
         <script src="jss/controls.js"></script>
         <script src="jss/main.js"></script>
+        <script src="jss/overlay.js"></script>
     </body>
 </html> 

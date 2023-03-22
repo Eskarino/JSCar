@@ -102,6 +102,7 @@ function startTraining(){
     if (animation_ongoing) {
         cancelAnimationFrame(frame_id)
     }
+    DOM_infos.innerText = 'Starting training...';
     training_ongoing = true;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     road.draw();
@@ -131,7 +132,7 @@ function one_race(){
         save_gnet();
     }
 
-    if (best_reward < 150 && best_reward - last_best_reward < 1 && race_counter%20==0 && race_counter!=0 && race_counter!=training_iter){
+    if (best_reward < 200 && best_reward - last_best_reward < 1 && race_counter%20==0 && race_counter!=0 && race_counter!=training_iter){
         discard_gnet();
         best_car = null;
         best_reward = 0;
@@ -143,7 +144,7 @@ function one_race(){
     if (race_counter >= training_iter){
         DOM_infos.innerText = 'Failed after 1000 races :('
         stop_training()
-    } else if (best_reward >= reward_limit) {
+    } else if (best_reward >= reward_limit * 2) {
         DOM_infos.innerText = 'TRAINING COMPLETED'
         stop_training()
     }
