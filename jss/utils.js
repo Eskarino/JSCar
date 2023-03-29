@@ -155,3 +155,9 @@ function random_choice(choices) {
     var index = Math.floor(Math.random() * choices.length);
     return choices[index];
   }
+
+  function write_on_canvas(text, x, y) {
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText(text, x, y); 
+  }

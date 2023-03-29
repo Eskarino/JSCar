@@ -1,7 +1,7 @@
  <!DOCTYPE html>
 <html>
     <head>
-        <title>RL Lab - Car game</title>
+        <title>Tibop's project</title>
 
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,7 +19,7 @@
             <div id = "carsInfo" class="infoSubsection">
                 <p id="fix-info">Information panel: </p>
                 <p id="infos">...</p>
-                <img id= "help" src="imgs/help.png" alt="Help" onclick="overlay_on()">
+                <img id= "help" src="imgs/help.png" alt="Help" title="Help" onclick="overlay_on()">
             </div>
             <div class="buttonsSection">
                 <div id="saveButtons" class="buttonsSubsection">
@@ -53,7 +53,100 @@
         </div>
 
         <div id="overlay" onclick="overlay_off()">
-            <div id="overlay-text">Coucou</div>
+            <div class="overlay-text">
+                <h4 style="text-align: center;">Bienvenue sur ce projet de Reinforcement Learning</h4>
+                <p>Pour que vous soyez sur cette page, c'est très probablement parce que j'ai 
+                    postulé pour rejoindre votre entreprise en tant que développeur.  
+                </p>
+                <p>
+                    J'espère que ce projet saura vous convaincre de mes capacités en code
+                    et que vous vous amuserez autant à le tester que moi à l'écrire. 
+                </p>
+                <hr class="solid">
+                <h4 style="text-align: center;">Objectif du projet RL Lab</h4>
+                <p>Ce projet a pour objectif d'apprendre à des "voitures" à suivre une route
+                    grace à un algorithme de Reinforcement Learning simple: L'algorithme génétique.   
+                </p>
+                <p>
+                    Les "voitures" disposent de senseurs et d'un comportement dicté par un Réseau de Neurones initialement aléatoire. 
+                    Elles apprenent ensuite la conduite par un mécanisme similaire à la selection naturelle. 
+                </p>
+                <p>
+                    Cinquante (50) voitures démarrent chaque course. La meilleure voiture sur 10 courses
+                    voit son Réseau de Neurones enegistré. Les voitures des 10 courses suivantes disposent d'une
+                    copie de ce Réseau avec une légère mutation spécifique à chaque voiture.  
+                </p>
+                <p>
+                    Le process est répété jusqu'à atteindre un 
+                    Score (Reward) spécifique: 500 points (équivalent à 2 à 3 tours de circuit)  
+                </p>
+                <hr class="solid">
+                <h4 style="text-align: center;">Entrainement manuel</h4>
+                <p>Pour faire l'expérience de ce qui se passe pendant l'entrainement, je recommande de commencer par un entrainement manuel.</p>
+                <ol>
+                    <li>Cliquer sur START</li>
+                    <li>La meilleure voiture est affichée en bleu</li>
+                    <li>Il est possible de selectionner une voiture en cliquant dessus</li>
+                    <li>Cliquer sur SAVE pour enregistrer la meilleure voiture (ou la voiture selectionnée)</li>
+                    <li>Cliquer sur START pour recommencer une course avec le nouveau réseau</li>
+                    <li>Entre deux courses, jouer sur les mutations pour voir l'effet</li>
+                    <li>Recommencez jusqu'à avoir une voiture qui fait un tour complet !</li>
+                </ol>
+
+            </div>
+            <div class="overlay-text">
+                <h4 style="text-align: center;">Comment ça marche ?</h4>
+                <p>Vous pouvez afficher cet écran à tout moment en cliquant sur: <img id= "help" src="imgs/help.png"> </p>
+                <p>Il est temps d'entraîner nos voitures</p>
+                <hr class="solid">
+                <h5 style="text-align: center;">Play</h5>
+                <table>
+                    <tr>
+                      <td><button class="btn btn-primary">Start</button></td>
+                      <td>Démarre une nouvelle course, avec le dernier modèle enregistré s'il existe</td>
+                    </tr>
+                    <tr>
+                      <td><button class="btn btn-primary">Reset</button></td>
+                      <td>Génère un nouveau circuit</td>
+                    </tr>
+                  </table> 
+                <hr class="solid">
+                <h5 style="text-align: center;">Training</h5>
+                <table>
+                    <tr>
+                      <td><button class="btn btn-primary">Auto</button></td>
+                      <td>Démarre un entrainement automatique</td>
+                    </tr>
+                    <tr>
+                      <td><button class="btn btn-primary">Stop</button></td>
+                      <td>Arrête l'entrainement automatique</td>
+                    </tr>
+                  </table> 
+                <hr class="solid">
+                <h5 style="text-align: center;">Mutation</h5>
+                <table>
+                    <tr>
+                      <td>Amplitude</td>
+                      <td>Définit l'amplitude de la mutation pour les neurones (0-100%)</td>
+                    </tr>
+                    <tr>
+                      <td>Probability</td>
+                      <td>Définit la probabilité qu'un neurone subisse une mutation (0-100%)</td>
+                    </tr>
+                  </table> 
+                <hr class="solid">
+                <h5 style="text-align: center;">Model</h5>
+                <table>
+                    <tr>
+                      <td><button class="btn btn-primary">Save</button></td>
+                      <td>Enregistre la meilleure voiture (ou la voiture selectionnée)</td>
+                    </tr>
+                    <tr>
+                      <td><button class="btn btn-primary">Delete</button></td>
+                      <td>Supprime le modèle et la meilleure voiture</td>
+                    </tr>
+                  </table> 
+            </div>
         </div> 
 
         <script src="jss/gnetwork.js"></script>

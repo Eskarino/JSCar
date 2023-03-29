@@ -24,6 +24,9 @@ class Car{
 
         this.damaged = false;
 
+        this.reward = 0;
+        this.next_gate = 4;
+
         if(agent == 'Virtual'){
             this.sensors = new Sensors(this.ctx, this, this.road);
             this.net = new GNet(

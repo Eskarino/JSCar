@@ -77,7 +77,7 @@ div{
 .btn {
     width: 80%;
     margin: 5% 5% 5% 5%;
-    min-width: 80px;
+    min-width: 70px;
 }
 
 p {
@@ -91,6 +91,11 @@ h5 {
     text-decoration-line: underline;
 }
 
+th, td {
+    padding: 10px;
+    text-align: left;
+  }
+
 #help {
     width: 15px;
     height: 15px;
@@ -99,25 +104,25 @@ h5 {
 }
 
 #overlay {
+    overflow:auto;
     position: fixed; /* Sit on top of the page content */
-    display: none; /* Hidden by default */
+    display: flex; /* Hidden by default */
     width: 100%; /* Full width (cover the whole page) */
     height: 100%; /* Full height (cover the whole page) */
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    background-color: rgba(0,0,0,0.8); /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
   }
 
-  #overlay-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 50px;
+  .overlay-text {
+    text-align: left;
+    top: 10%;
+    left: 00%;
+    width: 30%;
+    min-width: 200px;
     color: white;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
   }
