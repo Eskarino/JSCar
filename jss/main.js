@@ -209,8 +209,13 @@ function save_gnet(){
         localStorage.setItem('best_car', 
             JSON.stringify(selected_car.net));
     } else {
-        localStorage.setItem('best_car', 
-            JSON.stringify(forever_best_car.net));
+        if (forever_best_car){
+            localStorage.setItem('best_car', 
+                JSON.stringify(forever_best_car.net));
+        } else {
+            localStorage.setItem('best_car', 
+                JSON.stringify(best_car.net));
+        }
     }
     console.log('Saved')
     DOM_infos.innerText = 'Network saved - Iteration ' + String(race_counter) + ' || Best reward: ' + String(~~best_reward);
