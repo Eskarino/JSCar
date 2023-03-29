@@ -103,7 +103,7 @@ function check_finish_conditions(){
     if (best_car.reward > reward_limit || loop_counter > 1000 + 10*best_car.reward || loop_counter > 5000){
         return true;
     }
-    let stopped_cars = cars.filter(c => c.speed == 0);
+    let stopped_cars = cars.filter(c => c.speed < 1);
     if(loop_counter > 100 && stopped_cars.length==nb_cars){
         return true;
     }
