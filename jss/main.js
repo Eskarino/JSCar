@@ -187,7 +187,9 @@ function calculate_reward(car){
 
 function car_init(){
     cars = generateCars(nb_cars);
-    
+    if(forever_best_car){
+        cars[0].net = forever_best_car.net;
+    }
     best_car = cars[0];
     let mutation_rate = document.getElementById("mutationRate").value/100;
     let mutation_prob = document.getElementById("mutationProb").value/100;
@@ -198,9 +200,6 @@ function car_init(){
                 GNet.mutate(cars[i].net, mutation_rate, mutation_prob)
             }
         }
-    }
-    if(forever_best_car){
-        cars[0].net = forever_best_car.net;
     }
 }
 
