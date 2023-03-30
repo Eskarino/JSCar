@@ -40,23 +40,21 @@ class Car{
 
     update(){
         if(!this.damaged){
-            this.#move();
-            this.polygon = this.#createPolygons();
-            this.damaged = this.#assessDamage();
-
             if(this.agent=='Virtual'){
                 this.sensors.update()
                 const offsets = this.sensors.readings.map(
                     s=>s==null?0:1-s.offset);
                 const gnet_in = [this.speed].concat(offsets)
                 const outputs=GNet.forward(gnet_in, this.net);
-
+                
                 this.controls.forward = outputs[0];
                 this.controls.left = outputs[1];
                 this.controls.right = outputs[2];
                 this.controls.backward = outputs[3];
-            }
-            
+            }     
+            this.#move();
+            this.polygon = this.#createPolygons();
+            this.damaged = this.#assessDamage();
         }
     }
 

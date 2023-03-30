@@ -125,7 +125,7 @@ class Road{
                 new_int_segments.push([new_int_points[i-1], new_int_points[i]]);
             }
         }
-        new_ext_segments.unshift([new_ext_points[new_ext_points.length-1], new_ext_points[s0]]);
+        new_ext_segments.unshift([new_ext_points[new_ext_points.length-1], new_ext_points[0]]);
         new_int_segments.unshift([new_int_points[new_int_points.length-1], new_int_points[0]]);
 
         this.ext_border = new_ext_segments;

@@ -46,6 +46,7 @@ function start(){
     loop_counter = 0;
     car_init();
     animation_ongoing = true;
+    check_clicked_car()
     loop(true);
 }
 
@@ -103,7 +104,7 @@ function check_finish_conditions(){
     if (best_car.reward > reward_limit || loop_counter > 1000 + 10*best_car.reward || loop_counter > 5000){
         return true;
     }
-    let stopped_cars = cars.filter(c => c.speed < 1);
+    let stopped_cars = cars.filter(c => c.speed <= 0);
     if(loop_counter > 100 && stopped_cars.length==nb_cars){
         return true;
     }
@@ -132,9 +133,14 @@ function one_race(){
         finished = loop(false);
     }
     best_reward = best_car.reward;
-    if (best_reward > forever_best_reward){
+    if (best_reward >= forever_best_reward){
         forever_best_reward = best_reward;
-        forever_best_car = best_car;
+        forever_best_car ={...best_car.net};
+    } else {
+        if (best_reward < 500){
+            console.log('Comment un même network peut-il produire des résultats différents ?')
+            discard_gnet()
+        }
     }
 
     console.log('Iteration ' + String(race_counter) + ' || Best reward: ' + String(~~best_reward))
@@ -187,19 +193,17 @@ function calculate_reward(car){
 
 function car_init(){
     cars = generateCars(nb_cars);
-    if(forever_best_car){
-        cars[0].net = forever_best_car.net;
-    }
-    best_car = cars[0];
+    
     let mutation_rate = document.getElementById("mutationRate").value/100;
     let mutation_prob = document.getElementById("mutationProb").value/100;
     if (localStorage.getItem('best_car')){
-        for (let i=0; i<cars.length; i++){
-            if(i!=0){
-                cars[i].net = JSON.parse(localStorage.getItem('best_car'));
-                GNet.mutate(cars[i].net, mutation_rate, mutation_prob)
-            }
+        for (let i=1; i<cars.length; i++){
+            cars[i].net = JSON.parse(localStorage.getItem('best_car'));
+            GNet.mutate(cars[i].net, mutation_rate, mutation_prob)
         }
+    }
+    if(forever_best_car){
+        cars[0].net = forever_best_car;
     }
 }
 
@@ -210,7 +214,7 @@ function save_gnet(){
     } else {
         if (forever_best_car){
             localStorage.setItem('best_car', 
-                JSON.stringify(forever_best_car.net));
+                JSON.stringify(forever_best_car));
         } else {
             localStorage.setItem('best_car', 
                 JSON.stringify(best_car.net));
